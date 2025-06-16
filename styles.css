@@ -1,0 +1,437 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Navigation Styles */
+nav {
+  background-color: #2c3e50;
+  padding: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+nav li {
+  margin: 0;
+}
+
+nav a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 15px 20px;
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+}
+
+nav a:hover {
+  background-color: #34495e;
+}
+
+nav a.active {
+  background-color: #3498db;
+}
+
+header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px 0;
+  text-align: center;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 300;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+header p {
+  margin: 10px 0 0 0;
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+main {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+section {
+  margin-bottom: 30px;
+  background-color: white;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+article {
+  padding: 20px;
+  border-left: 4px solid #3498db;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+article h2 {
+  color: #2c3e50;
+  margin-top: 0;
+  font-size: 1.4rem;
+}
+
+article p {
+  color: #555;
+  margin-bottom: 0;
+}
+
+footer {
+  text-align: center;
+  padding: 20px 0;
+  background-color: #2c3e50;
+  color: white;
+  margin-top: 40px;
+}
+
+/* Form Styles */
+.form-container {
+  max-width: 500px;
+  margin: 40px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+/* Select dropdown styling */
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  background-color: white;
+  cursor: pointer;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+/* Checkbox styling */
+.form-group input[type="checkbox"] {
+  width: auto;
+  margin-right: 8px;
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.form-group label:has(input[type="checkbox"]) {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+/* Form links styling */
+.form-links {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.form-links p {
+  margin: 10px 0 15px 0; /* Add bottom margin for proper spacing */
+  line-height: 1.4; /* Improve line height */
+}
+
+.form-links a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+/* Prevent overlapping in form links container */
+.form-links div {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Add gap between elements */
+  align-items: center;
+}
+
+.form-links div p {
+  margin: 0; /* Reset margin for paragraphs inside form-links div */
+}
+
+.form-links div .btn {
+  margin-top: 0; /* Remove top margin to rely on gap */
+}
+
+/* CRITICAL FIX: Sign In Button Text Visibility */
+.form-links .btn,
+.form-links a.btn {
+  background: #ffffff !important; /* White background */
+  color: #2c3e50 !important; /* Dark text */
+  border: 2px solid #3498db !important; /* Blue border */
+  font-weight: 700 !important; /* Extra bold text */
+  text-shadow: none !important; /* No text shadow */
+}
+
+.form-links .btn:hover,
+.form-links a.btn:hover {
+  background: #f8f9fa !important; /* Light gray background on hover */
+  color: #1a252f !important; /* Even darker text on hover */
+  border-color: #2980b9 !important; /* Darker blue border */
+  transform: translateY(-1px);
+}
+
+/* Additional override for any button inside form-links */
+.form-links button,
+.form-links a[class*="btn"] {
+  background: #ffffff !important;
+  color: #2c3e50 !important;
+  border: 2px solid #3498db !important;
+  font-weight: 700 !important;
+}
+
+/* Force dark text on sign in buttons specifically */
+a[href*="login.html"].btn,
+button[type="submit"]:not(.btn-success):not(.btn-secondary) {
+  color: #2c3e50 !important;
+}
+
+/* Emoji icon visibility fix */
+.form-links .btn span,
+.form-links a.btn span {
+  opacity: 1 !important;
+  color: inherit !important;
+}
+
+/* Input placeholder styling */
+.form-group input::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+/* Password strength indicator */
+.password-strength {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #666;
+}
+
+.password-strength.weak {
+  color: #e74c3c;
+}
+
+.password-strength.medium {
+  color: #f39c12;
+}
+
+.password-strength.strong {
+  color: #27ae60;
+}
+
+/* Button Styles */
+.btn {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  padding: 14px 30px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+  width: 100%;
+  margin-top: 10px;
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, #2980b9 0%, #1f5f99 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+/* Secondary button style */
+.btn-secondary {
+  background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+  box-shadow: 0 4px 15px rgba(149, 165, 166, 0.3);
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, #7f8c8d 0%, #6c7b7d 100%);
+  box-shadow: 0 6px 20px rgba(149, 165, 166, 0.4);
+}
+
+/* Success button style */
+.btn-success {
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #229954 0%, #1e8449 100%);
+  box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+}
+
+/* Button group styling */
+.btn-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+.btn-group .btn {
+  flex: 1;
+  margin-top: 0;
+  min-width: 120px; /* Ensure buttons have minimum width */
+  width: auto !important; /* Override default width: 100% */
+}
+
+.btn-group .btn-sm {
+  flex: 0 1 auto; /* Don't stretch small buttons */
+  padding: 10px 15px;
+}
+
+/* Small button variant */
+.btn-sm {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  width: auto !important; /* Override default width: 100% for small buttons */
+  min-width: 120px; /* Ensure minimum width for text visibility */
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Ensure button text is always visible */
+.btn,
+.btn-sm,
+.btn-success,
+.btn-secondary {
+  overflow: visible;
+  text-overflow: clip;
+  word-break: keep-all;
+}
+
+/* Specific text contrast improvements */
+.btn-sm {
+  text-shadow: none; /* Remove any text shadow that might interfere */
+}
+
+.form-links .btn-sm {
+  font-weight: 600 !important; /* Make text bolder for better readability */
+  text-decoration: none;
+}
+
+/* Fix for icon buttons */
+.btn-icon span {
+  flex-shrink: 0; /* Prevent emoji from shrinking */
+  margin-right: 6px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  section {
+    grid-template-columns: 1fr;
+    margin: 0 10px 20px 10px;
+    padding: 20px;
+  }
+
+  main {
+    padding: 10px;
+  }
+
+  /* Mobile button adjustments */
+  .btn-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-group .btn {
+    width: 100% !important;
+    min-width: auto;
+  }
+
+  .btn {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  .btn-sm {
+    padding: 8px 15px;
+    font-size: 12px;
+  }
+}

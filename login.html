@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NewsBoard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="login.html" class="active">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>Login</h1>
+        <p>Sign in to your NewsBoard account</p>
+    </header>
+    <main>
+        <div class="form-container">
+            <h2>Welcome Back</h2>
+            <form action="#" method="POST">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email address">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="remember"> Remember me
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-icon">
+                    <span>🔑</span> Sign In
+                </button>
+            </form>
+            <div class="form-links">
+                <p><a href="forgot-password.html">Forgot your password?</a></p>
+            </div>
+        </div>
+
+        <!-- Sign up call-to-action -->
+        <div class="form-container"
+            style="margin-top: 30px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border: 2px dashed #3498db;">
+            <h3 style="text-align: center; color: #2c3e50; margin-bottom: 15px;">New to NewsBoard?</h3>
+            <p style="text-align: center; color: #555; margin-bottom: 20px;">Join thousands of readers who trust us for
+                their daily news</p>
+            <a href="register.html" class="btn btn-success btn-icon">
+                <span>🎉</span> Create Your Free Account
+            </a>
+        </div>
+
+        <section>
+            <article>
+                <h2>Why Create an Account?</h2>
+                <ul>
+                    <li>Personalized news feed based on your interests</li>
+                    <li>Save articles to read later</li>
+                    <li>Comment on articles and join discussions</li>
+                    <li>Get email newsletters with curated content</li>
+                    <li>Access to premium content and exclusive articles</li>
+                </ul>
+            </article>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 NewsBoard. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Login form validation
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                e.preventDefault();
+                alert('Please fill in all fields.');
+                return false;
+            }
+
+            // Basic email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                e.preventDefault();
+                alert('Please enter a valid email address.');
+                return false;
+            }
+
+            // Show success message (for demo purposes)
+            e.preventDefault();
+            alert('Login successful! Welcome back to NewsBoard!');
+        });
+    </script>
+</body>
+
+</html>

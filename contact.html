@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - NewsBoard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html" class="active">Contact</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>Contact Us</h1>
+        <p>Get in touch with our team</p>
+    </header>
+    <main>
+        <div class="form-container">
+            <h2>Send us a Message</h2>
+            <form action="#" method="POST">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="6" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-icon">
+                    <span>📨</span> Send Message
+                </button>
+            </form>
+        </div>
+
+        <section>
+            <article>
+                <h2>Contact Information</h2>
+                <p><strong>Address:</strong> 123 News Street, Media City, NY 10001</p>
+                <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+                <p><strong>Email:</strong> info@newsboard.com</p>
+                <p><strong>Business Hours:</strong> Monday - Friday, 9:00 AM - 6:00 PM EST</p>
+            </article>
+            <article>
+                <h2>Editorial Team</h2>
+                <p><strong>Editor-in-Chief:</strong> editor@newsboard.com</p>
+                <p><strong>News Tips:</strong> tips@newsboard.com</p>
+                <p><strong>Press Releases:</strong> press@newsboard.com</p>
+                <p><strong>Advertising:</strong> ads@newsboard.com</p>
+            </article>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 NewsBoard. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
