@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newsboard - Animated Landing</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- Latest Tailwind CSS v4 Play CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp" defer></script>
+  <script>
+      tailwind.config = {
+          theme: {
+              extend: {
+                  colors: {
+                      primary: '#2563eb',
+                      accent: '#f59e42',
+                  },
+              },
+          },
+          plugins: [],
+      }
+  </script>
+  <style>
+    .stagger-children > * {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeIn 0.7s cubic-bezier(0.4,0,0.2,1) forwards;
+    }
+    .stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+    .stagger-children > *:nth-child(2) { animation-delay: 0.25s; }
+    .stagger-children > *:nth-child(3) { animation-delay: 0.4s; }
+    .stagger-children > *:nth-child(4) { animation-delay: 0.55s; }
+  </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen overflow-x-hidden">
+  <!-- Navbar -->
+  <nav class="navbar glassy animate-fadeInTop animate-shadowPulse">
+    <div class="nav-content">
+      <div class="nav-logo animate-bounce2 animate-colorCycle">📰 <span>Newsboard</span></div>
+      <ul class="nav-links">
+        <li><a href="#features" class="animate-fadeInLeft animate-borderGlow">Features</a></li>
+        <li><a href="#about" class="animate-fadeInTop animate-borderGlow">About</a></li>
+        <li><a href="#contact" class="animate-fadeInRight animate-borderGlow">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn btn-secondary animate-zoomIn animate-float" id="loginBtn">Login</button>
+        <button class="btn btn-primary animate-zoomIn animate-float" id="signupBtn" style="animation-delay:0.2s;">Sign Up</button>
+        <button class="night-toggle animate-rotateIn animate-pop" id="nightToggle" aria-label="Toggle night mode">
+          <span class="moon animate-wave">🌙</span><span class="sun animate-wave">☀️</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+  <!-- Hero Section -->
+  <header class="hero animate-fadeInBottom animate-blurIn">
+    <div class="hero-content glassy animate-zoomIn animate-popUp">
+      <h1 class="hero-title animate-bounceInLeft animate-colorCycle">Stay Ahead with <span class="highlight animate-tada animate-borderGlow">Newsboard</span></h1>
+      <p class="hero-sub animate-fadeIn animate-fadeInScale">Your daily dose of curated news, delivered with style and speed.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary animate-pulse2 animate-shadowPulse">Get Started</button>
+        <button class="btn btn-secondary animate-swing animate-shadowPulse">Learn More</button>
+      </div>
+    </div>
+    <div class="hero-bg-anim animate-fadeIn animate-fadeInBlur"></div>
+  </header>
+  <main>
+    <section class="features" id="features">
+      <div class="feature-card fade-in-up glassy animate-fadeInLeft animate-popUp">
+        <div class="icon animate-heartBeat animate-float">📰</div>
+        <h2 class="animate-fadeInTop animate-colorCycle">Curated Content</h2>
+        <p class="animate-fadeInBottom animate-fadeInScale">Handpicked news from trusted sources, updated in real time.</p>
+      </div>
+      <div class="feature-card fade-in-up glassy animate-fadeInTop animate-popUp" style="animation-delay:0.2s;">
+        <div class="icon animate-jello animate-float">⚡</div>
+        <h2 class="animate-fadeInLeft animate-colorCycle">Lightning Fast</h2>
+        <p class="animate-fadeInRight animate-fadeInScale">Instant updates and blazing fast performance on any device.</p>
+      </div>
+      <div class="feature-card fade-in-up glassy animate-fadeInRight animate-popUp" style="animation-delay:0.4s;">
+        <div class="icon animate-rubberBand animate-float">🎨</div>
+        <h2 class="animate-fadeInTop animate-colorCycle">Beautifully Designed</h2>
+        <p class="animate-fadeInBottom animate-fadeInScale">Modern, animated UI for a delightful reading experience.</p>
+      </div>
+    </section>
+    <section class="about" id="about">
+      <div class="about-card glassy fade-in-up animate-rollIn animate-fadeInBlur" style="animation-delay:0.6s;">
+        <h2 class="animate-flipInX animate-colorCycle">About Newsboard</h2>
+        <p class="animate-fadeIn animate-fadeInScale">Newsboard is your one-stop platform for the latest, most relevant news, presented in a stunning, modern interface. Enjoy seamless reading day or night!</p>
+      </div>
+    </section>
+    <section class="contact" id="contact">
+      <div class="contact-card glassy fade-in-up animate-bounceInUp animate-fadeInBlur" style="animation-delay:0.8s;">
+        <h2 class="animate-flipInY animate-colorCycle">Contact Us</h2>
+        <p class="animate-fadeIn animate-fadeInScale">Have questions or feedback? <a href="mailto:info@newsboard.com" class="animate-flash animate-borderGlow">info@newsboard.com</a></p>
+      </div>
+    </section>
+  </main>
+  <footer class="footer animate-fadeInUp animate-float">
+    <p>© 2025 Newsboard. All rights reserved.</p>
+  </footer>
+  <!-- Login Modal -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal glassy morphism animate-zoomIn animate-popUp">
+      <button class="modal-close animate-rotateIn animate-pop" data-close="loginModal">×</button>
+      <h2 class="animate-fadeInTop animate-colorCycle">Login</h2>
+      <form class="auth-form animate-fadeInBottom animate-fadeInScale">
+        <input type="email" placeholder="Email" required class="animate-fadeInLeft animate-blurIn">
+        <input type="password" placeholder="Password" required class="animate-fadeInRight animate-blurIn">
+        <button type="submit" class="btn btn-primary w-full animate-bounce2 animate-shadowPulse">Login</button>
+      </form>
+      <p class="modal-switch animate-fadeIn animate-fadeInScale">Don't have an account? <a href="#" id="toSignup" class="animate-tada animate-borderGlow">Sign Up</a></p>
+    </div>
+  </div>
+  <!-- Signup Modal -->
+  <div class="modal-overlay" id="signupModal">
+    <div class="modal glassy morphism animate-zoomIn animate-popUp">
+      <button class="modal-close animate-rotateIn animate-pop" data-close="signupModal">×</button>
+      <h2 class="animate-fadeInTop animate-colorCycle">Sign Up</h2>
+      <form class="auth-form animate-fadeInBottom animate-fadeInScale">
+        <input type="text" placeholder="Name" required class="animate-fadeInLeft animate-blurIn">
+        <input type="email" placeholder="Email" required class="animate-fadeInRight animate-blurIn">
+        <input type="password" placeholder="Password" required class="animate-fadeInLeft animate-blurIn">
+        <button type="submit" class="btn btn-primary w-full animate-bounce2 animate-shadowPulse">Sign Up</button>
+      </form>
+      <p class="modal-switch animate-fadeIn animate-fadeInScale">Already have an account? <a href="#" id="toLogin" class="animate-tada animate-borderGlow">Login</a></p>
+    </div>
+  </div>
+  <script>
+    // Night mode toggle
+    const nightToggle = document.getElementById('nightToggle');
+    nightToggle.addEventListener('click', () => {
+      document.body.classList.toggle('night');
+      localStorage.setItem('nightMode', document.body.classList.contains('night'));
+    });
+    if (localStorage.getItem('nightMode') === 'true') {
+      document.body.classList.add('night');
+    }
+    // Modal logic
+    const loginBtn = document.getElementById('loginBtn');
+    const signupBtn = document.getElementById('signupBtn');
+    const loginModal = document.getElementById('loginModal');
+    const signupModal = document.getElementById('signupModal');
+    loginBtn.onclick = () => loginModal.classList.add('open');
+    signupBtn.onclick = () => signupModal.classList.add('open');
+    document.querySelectorAll('.modal-close').forEach(btn => {
+      btn.onclick = (e) => {
+        document.getElementById(btn.getAttribute('data-close')).classList.remove('open');
+      };
+    });
+    document.getElementById('toSignup').onclick = (e) => {
+      e.preventDefault();
+      loginModal.classList.remove('open');
+      signupModal.classList.add('open');
+    };
+    document.getElementById('toLogin').onclick = (e) => {
+      e.preventDefault();
+      signupModal.classList.remove('open');
+      loginModal.classList.add('open');
+    };
+    // Animate feature cards on scroll
+    function animateOnScroll() {
+      document.querySelectorAll('.fade-in-up').forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight - 60) {
+          el.classList.add('visible');
+        }
+      });
+    }
+    window.addEventListener('scroll', animateOnScroll);
+    window.addEventListener('DOMContentLoaded', animateOnScroll);
+  </script>
+</body>
+
+</html>
