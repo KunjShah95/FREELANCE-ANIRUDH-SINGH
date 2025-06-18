@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewsBoard - Stay Informed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#64748b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .article-card {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+
+        .article-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .animation-delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .animation-delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        .animation-delay-300 {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .search-highlight {
+            background-color: #fef08a;
+            color: #1f2937;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+
+        .bg-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f1f5f9' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .dark .bg-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23374151' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Line clamp utilities */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300 bg-pattern min-h-screen">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-primary text-white p-2 rounded-lg">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M2 3a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H3a1 1 0 01-1-1V3zm2 2v12h12V5H4zm2 2h8v2H6V7zm0 4h8v2H6v-2z" />
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">NewsBoard</h1>
+                </div>
+
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="#" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Home</a>
+                    <a href="#"
+                        class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Categories</a>
+                    <a href="#" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">About</a>
+                    <a href="login.html" id="loginBtn"
+                        class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Login</a>
+                    <a href="signup.html" id="signupBtn"
+                        class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Sign
+                        Up</a>
+                    <button id="darkModeToggle"
+                        class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                        <svg class="w-5 h-5 dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                        </svg>
+                        <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </nav>
+
+                <!-- Mobile menu button -->
+                <button id="mobileMenuToggle" class="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile menu -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700">
+                <nav class="flex flex-col space-y-2 mt-4">
+                    <a href="#"
+                        class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors py-2">Home</a>
+                    <a href="#"
+                        class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors py-2">Categories</a>
+                    <a href="#"
+                        class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors py-2">About</a>
+                    <a href="login.html" id="mobileLoginBtn"
+                        class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors py-2">Login</a>
+                    <a href="signup.html" id="mobileSignupBtn"
+                        class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-center">Sign
+                        Up</a>
+                    <button id="mobileDarkModeToggle"
+                        class="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary transition-colors py-2">
+                        <svg class="w-5 h-5 dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                        </svg>
+                        <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span>Toggle Dark Mode</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-r from-primary to-blue-600 text-white py-24 overflow-hidden">
+        <!-- Background Splash Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80"
+                alt="News Background" class="w-full h-full object-cover opacity-20">
+            <div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-blue-600/80"></div>
+        </div>
+
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl md:text-6xl font-bold mb-6 text-white drop-shadow-lg fade-in">Stay Informed</h2>
+                <p class="text-xl md:text-2xl mb-10 text-white opacity-90 drop-shadow-md fade-in animation-delay-100">
+                    Get the latest news and updates from around the world</p>
+
+                <!-- Search Bar -->
+                <div class="max-w-2xl mx-auto relative fade-in animation-delay-200">
+                    <input type="text" id="searchInput" placeholder="Search news articles..."
+                        class="w-full px-6 py-4 rounded-full text-gray-900 dark:text-white bg-white dark:bg-gray-800 text-lg focus:outline-none focus:ring-4 focus:ring-blue-300/50 shadow-lg">
+                    <button id="searchBtn"
+                        class="absolute right-2 top-2 bg-primary text-white p-2 rounded-full hover:bg-blue-700 transition-colors shadow-md">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Sidebar -->
+            <aside class="lg:w-1/4">
+                <!-- Categories -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 transform transition-all hover:shadow-xl">
+                    <h3
+                        class="text-xl font-bold text-gray-900 dark:text-white mb-6 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Categories
+                    </h3>
+                    <div id="categoryFilters" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
+                        <button
+                            class="category-filter active px-4 py-3 rounded-lg bg-primary text-white flex items-center justify-between transition-all duration-300 transform hover:translate-x-1"
+                            data-category="all">
+                            <span class="font-medium">All News</span>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <button
+                            class="category-filter px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 flex items-center justify-between transition-all duration-300 transform hover:translate-x-1 hover:bg-gray-200 dark:hover:bg-gray-600"
+                            data-category="technology">
+                            <span class="font-medium">Technology</span>
+                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
+                                viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <button
+                            class="category-filter px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 flex items-center justify-between transition-all duration-300 transform hover:translate-x-1 hover:bg-gray-200 dark:hover:bg-gray-600"
+                            data-category="business">
+                            <span class="font-medium">Business</span>
+                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
+                                viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <button
+                            class="category-filter px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 flex items-center justify-between transition-all duration-300 transform hover:translate-x-1 hover:bg-gray-200 dark:hover:bg-gray-600"
+                            data-category="sports">
+                            <span class="font-medium">Sports</span>
+                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
+                                viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <button
+                            class="category-filter px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 flex items-center justify-between transition-all duration-300 transform hover:translate-x-1 hover:bg-gray-200 dark:hover:bg-gray-600"
+                            data-category="health">
+                            <span class="font-medium">Health</span>
+                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
+                                viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <button
+                            class="category-filter px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 flex items-center justify-between transition-all duration-300 transform hover:translate-x-1 hover:bg-gray-200 dark:hover:bg-gray-600"
+                            data-category="entertainment">
+                            <span class="font-medium">Entertainment</span>
+                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
+                                viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Trending Topics -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transform transition-all hover:shadow-xl">
+                    <h3
+                        class="text-xl font-bold text-gray-900 dark:text-white mb-6 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Trending Topics
+                    </h3>
+                    <div class="space-y-4">
+                        <div
+                            class="relative bg-gradient-to-r from-red-500 to-pink-500 rounded-lg p-4 pl-8 shadow-md transform transition-transform duration-300 hover:scale-105">
+                            <div
+                                class="absolute -left-3 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-900 rounded-full w-8 h-8 flex items-center justify-center shadow-md">
+                                <span class="text-red-500 font-bold text-sm">#1</span>
+                            </div>
+                            <p class="text-white font-medium">AI Revolution</p>
+                            <div class="mt-1 flex items-center">
+                                <span class="text-white/80 text-xs">128K mentions</span>
+                                <span class="ml-auto bg-white/20 text-white text-xs px-2 py-1 rounded-full">Tech</span>
+                            </div>
+                        </div>
+
+                        <div
+                            class="relative bg-gradient-to-r from-orange-500 to-amber-500 rounded-lg p-4 pl-8 shadow-md transform transition-transform duration-300 hover:scale-105">
+                            <div
+                                class="absolute -left-3 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-900 rounded-full w-8 h-8 flex items-center justify-center shadow-md">
+                                <span class="text-orange-500 font-bold text-sm">#2</span>
+                            </div>
+                            <p class="text-white font-medium">Climate Change</p>
+                            <div class="mt-1 flex items-center">
+                                <span class="text-white/80 text-xs">94K mentions</span>
+                                <span class="ml-auto bg-white/20 text-white text-xs px-2 py-1 rounded-full">World</span>
+                            </div>
+                        </div>
+
+                        <div
+                            class="relative bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-lg p-4 pl-8 shadow-md transform transition-transform duration-300 hover:scale-105">
+                            <div
+                                class="absolute -left-3 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-900 rounded-full w-8 h-8 flex items-center justify-center shadow-md">
+                                <span class="text-yellow-500 font-bold text-sm">#3</span>
+                            </div>
+                            <p class="text-white font-medium">Space Exploration</p>
+                            <div class="mt-1 flex items-center">
+                                <span class="text-white/80 text-xs">76K mentions</span>
+                                <span
+                                    class="ml-auto bg-white/20 text-white text-xs px-2 py-1 rounded-full">Science</span>
+                            </div>
+                        </div>
+
+                        <div
+                            class="relative bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg p-4 pl-8 shadow-md transform transition-transform duration-300 hover:scale-105">
+                            <div
+                                class="absolute -left-3 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-900 rounded-full w-8 h-8 flex items-center justify-center shadow-md">
+                                <span class="text-green-500 font-bold text-sm">#4</span>
+                            </div>
+                            <p class="text-white font-medium">Cryptocurrency</p>
+                            <div class="mt-1 flex items-center">
+                                <span class="text-white/80 text-xs">62K mentions</span>
+                                <span
+                                    class="ml-auto bg-white/20 text-white text-xs px-2 py-1 rounded-full">Finance</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Articles Grid -->
+            <section class="lg:w-3/4">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Latest News</h2>
+                    <div class="flex items-center space-x-4">
+                        <select id="sortSelect"
+                            class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="popular">Most Popular</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Articles will be dynamically loaded here -->
+                </div>
+
+                <!-- Load More Button -->
+                <div class="text-center mt-12">
+                    <button id="loadMoreBtn"
+                        class="bg-primary text-white px-8 py-3 rounded-full hover:bg-blue-700 transition-colors font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 flex items-center mx-auto">
+                        <span>Load More Articles</span>
+                        <svg class="w-5 h-5 ml-2 animate-bounce" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="bg-primary text-white p-2 rounded-lg">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 3a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H3a1 1 0 01-1-1V3zm2 2v12h12V5H4zm2 2h8v2H6V7zm0 4h8v2H6v-2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold">NewsBoard</h3>
+                    </div>
+                    <p class="text-gray-400">Your trusted source for the latest news and updates from around the world.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Categories</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Categories</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Technology</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Business</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Sports</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Health</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 NewsBoard. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample news data
+        const newsData = [
+            {
+                id: 1,
+                title: "Revolutionary AI Technology Transforms Healthcare Industry",
+                excerpt: "New artificial intelligence breakthrough promises to revolutionize patient care and medical diagnosis with unprecedented accuracy.",
+                category: "technology",
+                author: "Dr. Sarah Johnson",
+                date: "2024-01-15",
+                image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                readTime: "5 min read",
+                popular: true
+            },
+            {
+                id: 2,
+                title: "Global Climate Summit Reaches Historic Agreement",
+                excerpt: "World leaders unite on ambitious climate goals, setting new standards for carbon reduction and renewable energy adoption.",
+                category: "business",
+                author: "Michael Chen",
+                date: "2024-01-14",
+                image: "https://images.unsplash.com/photo-1544931733-7ee8475ea8a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                readTime: "7 min read",
+                popular: false
+            },
+            {
+                id: 3,
+                title: "Olympic Games Break Viewership Records Worldwide",
+                excerpt: "This year's Olympic Games have shattered all previous viewership records, bringing together billions of viewers globally.",
+                category: "sports",
+                author: "Emma Rodriguez",
+                date: "2024-01-13",
+                image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                readTime: "4 min read",
+                popular: true
+            },
+            {
+                id: 4,
+                title: "Breakthrough in Cancer Research Offers New Hope",
+                excerpt: "Scientists discover promising new treatment method that could significantly improve cancer patient outcomes.",
+                category: "health",
+                author: "Dr. James Wilson",
+                date: "2024-01-12",
+                image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                readTime: "6 min read",
+                popular: false
+            },
+            {
+                id: 5,
+                title: "Streaming Wars Heat Up with New Platform Launch",
+                excerpt: "Major tech company enters the streaming market with exclusive content and competitive pricing strategy.",
+                category: "entertainment",
+                author: "Lisa Park",
+                date: "2024-01-11",
+                image: "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                readTime: "3 min read",
+                popular: true
+            },
+            {
+                id: 6,
+                title: "Cryptocurrency Market Sees Major Regulatory Changes",
+                excerpt: "New regulations promise to bring stability and legitimacy to the volatile cryptocurrency market.",
+                category: "business",
+                author: "Robert Kim",
+                date: "2024-01-10",
+                image: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                readTime: "8 min read",
+                popular: false
+            }
+        ];
+
+        // State management
+        let currentArticles = [...newsData];
+        let filteredArticles = [...newsData];
+        let currentCategory = 'all';
+        let currentSort = 'newest';
+        let searchQuery = '';
+        let articlesPerPage = 4;
+        let currentPage = 1;
+
+        // DOM elements
+        const articlesGrid = document.getElementById('articlesGrid');
+        const categoryFilters = document.querySelectorAll('.category-filter');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const sortSelect = document.getElementById('sortSelect');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        // Initialize the app
+        function init() {
+            renderArticles();
+            setupEventListeners();
+            initDarkMode();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Category filters
+            categoryFilters.forEach(filter => {
+                filter.addEventListener('click', handleCategoryFilter);
+            });
+
+            // Search functionality
+            searchInput.addEventListener('input', handleSearch);
+            searchBtn.addEventListener('click', handleSearch);
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleSearch();
+            });
+
+            // Sort functionality
+            sortSelect.addEventListener('change', handleSort);
+
+            // Load more button
+            loadMoreBtn.addEventListener('click', loadMoreArticles);
+
+            // Dark mode toggle
+            darkModeToggle.addEventListener('click', toggleDarkMode);
+            const mobileDarkModeToggle = document.getElementById('mobileDarkModeToggle');
+            if (mobileDarkModeToggle) {
+                mobileDarkModeToggle.addEventListener('click', toggleDarkMode);
+            }
+
+            // Mobile menu toggle
+            mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+        }
+
+        // Render articles
+        function renderArticles() {
+            const articlesToShow = filteredArticles.slice(0, currentPage * articlesPerPage);
+
+            articlesGrid.innerHTML = articlesToShow.map(article => `
+                <article class="article-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden fade-in hover:shadow-xl transition-all duration-300">
+                    <div class="relative overflow-hidden h-56">
+                        <img src="${article.image}" alt="${article.title}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <span class="inline-block bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide shadow-md">
+                                ${article.category}
+                            </span>
+                            <h3 class="text-xl font-bold text-white mb-2 mt-2 line-clamp-2 drop-shadow-sm">
+                                ${highlightSearchTerm(article.title)}
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                            ${highlightSearchTerm(article.excerpt)}
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center">
+                                    <span class="text-xs font-semibold">
+                                        ${article.author.split(' ').map(n => n[0]).join('')}
+                                    </span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">${article.author}</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">${formatDate(article.date)}</p>
+                                </div>
+                            </div>
+                            <button class="text-primary hover:text-blue-700 font-semibold text-sm transition-colors flex items-center">
+                                <span>Read More</span>
+                                <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+
+            // Show/hide load more button
+            loadMoreBtn.style.display = articlesToShow.length < filteredArticles.length ? 'block' : 'none';
+        }
+
+        // Handle category filtering
+        function handleCategoryFilter(e) {
+            const category = e.target.dataset.category;
+            currentCategory = category;
+            currentPage = 1;
+
+            // Update active state
+            categoryFilters.forEach(filter => {
+                filter.classList.remove('active', 'bg-primary', 'text-white');
+                filter.classList.add('text-gray-700', 'dark:text-gray-300');
+            });
+            e.target.classList.add('active', 'bg-primary', 'text-white');
+            e.target.classList.remove('text-gray-700', 'dark:text-gray-300');
+
+            filterAndSortArticles();
+        }
+
+        // Handle search
+        function handleSearch() {
+            searchQuery = searchInput.value.toLowerCase().trim();
+            currentPage = 1;
+            filterAndSortArticles();
+        }
+
+        // Handle sorting
+        function handleSort() {
+            currentSort = sortSelect.value;
+            currentPage = 1;
+            filterAndSortArticles();
+        }
+
+        // Filter and sort articles
+        function filterAndSortArticles() {
+            let filtered = [...newsData];
+
+            // Apply category filter
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(article => article.category === currentCategory);
+            }
+
+            // Apply search filter
+            if (searchQuery) {
+                filtered = filtered.filter(article =>
+                    article.title.toLowerCase().includes(searchQuery) ||
+                    article.excerpt.toLowerCase().includes(searchQuery) ||
+                    article.author.toLowerCase().includes(searchQuery)
+                );
+            }
+
+            // Apply sorting
+            filtered.sort((a, b) => {
+                switch (currentSort) {
+                    case 'newest':
+                        return new Date(b.date) - new Date(a.date);
+                    case 'oldest':
+                        return new Date(a.date) - new Date(b.date);
+                    case 'popular':
+                        return b.popular - a.popular;
+                    default:
+                        return 0;
+                }
+            });
+
+            filteredArticles = filtered;
+            renderArticles();
+        }
+
+        // Load more articles
+        function loadMoreArticles() {
+            currentPage++;
+            renderArticles();
+        }
+
+        // Highlight search terms
+        function highlightSearchTerm(text) {
+            if (!searchQuery) return text;
+            const regex = new RegExp(`(${searchQuery})`, 'gi');
+            return text.replace(regex, '<span class="search-highlight">$1</span>');
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Dark mode functionality
+        function initDarkMode() {
+            const isDark = localStorage.getItem('darkMode') === 'true';
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+            }
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Authentication state
+        let currentUser = null;
+        let isLoggedIn = false;
+
+        // Authentication DOM elements
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+        const mobileSignupBtn = document.getElementById('mobileSignupBtn');
+
+        // Setup authentication event listeners
+        function setupAuthEventListeners() {
+            // Modal triggers - now redirect to separate pages
+            loginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'login.html';
+            });
+
+            signupBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'signup.html';
+            });
+
+            mobileLoginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'login.html';
+            });
+
+            mobileSignupBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'signup.html';
+            });
+        }
+
+        function updateAuthUI() {
+            if (isLoggedIn && currentUser) {
+                // Update header to show user info instead of login/signup
+                const navElement = document.querySelector('nav.hidden.md\\:flex');
+                navElement.innerHTML = `
+                    <a href="#" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Home</a>
+                    <a href="#" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Categories</a>
+                    <a href="#" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">About</a>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center">
+                                <span class="text-sm font-semibold">${currentUser.avatar}</span>
+                            </div>
+                            <span class="text-gray-700 dark:text-gray-300">${currentUser.name}</span>
+                        </div>
+                        <button id="logoutBtn" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+                            Logout
+                        </button>
+                        <button id="darkModeToggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                            <svg class="w-5 h-5 dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                            </svg>
+                            <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+
+                // Re-setup dark mode toggle
+                document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+
+                // Setup logout
+                document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+            }
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            isLoggedIn = false;
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('isLoggedIn');
+            location.reload(); // Refresh page to reset UI
+        }
+
+        function initAuth() {
+            // Check for existing session
+            const storedUser = localStorage.getItem('currentUser');
+            const storedLoginState = localStorage.getItem('isLoggedIn');
+
+            if (storedUser && storedLoginState === 'true') {
+                currentUser = JSON.parse(storedUser);
+                isLoggedIn = true;
+                updateAuthUI();
+            }
+
+            setupAuthEventListeners();
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            initAuth();
+        });
+    </script>
+</body>
+
+</html>
